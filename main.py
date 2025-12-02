@@ -15,8 +15,6 @@ def get_movie(movie):
         "Authorization": "Bearer {key}".format(key=API_KEY)
     }
 
-    print(url)
-
     response = requests.get(url, headers=headers)
 
     return response.json()
@@ -27,6 +25,8 @@ frame = ttk.Frame(root, padding=(10,10,10,10))
 frame.grid(column=0, row=0)
 
 
+
+root.mainloop()
 
 
 
