@@ -1,0 +1,1 @@
+DEFAULT_PADDING = (10,  10, 10, 10)
