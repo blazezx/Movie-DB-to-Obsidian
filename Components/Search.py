@@ -15,19 +15,29 @@ class SearchFrame:
         choice_list_var = StringVar(value=movie_choice_list)
 
         def on_change_selected_movie(selection):
-            print(movies_items[selection[0]])
+            if selection:
+                print(movies_items[selection[0]])
 
         def search_movie():
-            movies = get_movie(movie_name.get())
-            movies_items.extend(movies)
-            for item in movies_items:
-                print(item)
-                mod_item = item["original_title"]
-                if item["release_date"]:
-                    mod_item = mod_item + " - " + item["release_date"]
-                movie_choice_list.append(mod_item)
-            # noinspection PyTypeChecker
-            choice_list_var.set(movie_choice_list)
+            entry_button.configure(state="disabled")
+            box.configure(state="disabled")
+            try:
+                movies = get_movie(movie_name.get())
+                movies_items.extend(movies)
+                for item in movies_items:
+                    print(item)
+                    mod_item = item["original_title"]
+                    if item["release_date"]:
+                        mod_item = mod_item + " - " + item["release_date"]
+                    movie_choice_list.append(mod_item)
+                # noinspection PyTypeChecker
+                choice_list_var.set(movie_choice_list)
+            except ConnectionError:
+                entry_button.state(["!disabled"])
+                box['state'] = "normal"
+
+            entry_button.configure(state="normal")
+            box.configure(state="normal")
 
         outer_frame = ttk.Frame(root)
         outer_frame.grid(column=0, row=0, padx=10, pady=5, sticky="NSEW")
@@ -42,7 +52,7 @@ class SearchFrame:
         entry_frame = ttk.Frame(top_frame, padding=DEFAULT_PADDING)
         entry_frame.grid(column=0, row=0, sticky="E")
 
-        entry_label = ttk.Label(entry_frame, text="Enter Movie for Database: ")
+        entry_label = ttk.Label(entry_frame, text="Search Movie by Title: ")
         entry_label.grid(column=0, row=0)
 
         entry_entry = ttk.Entry(entry_frame, textvariable=movie_name)
@@ -51,9 +61,6 @@ class SearchFrame:
         entry_button = ttk.Button(entry_frame, text="Search", command=search_movie)
         entry_button.grid(column=3, row=0)
 
-        root.rowconfigure(0, weight=1)
-        root.rowconfigure(1, weight=1)
-        root.columnconfigure(0, weight=1)
         top_frame.rowconfigure(1, weight=4)
         top_frame.rowconfigure(0, weight=1)
         top_frame.columnconfigure(0, weight=1)
@@ -71,3 +78,4 @@ class SearchFrame:
         list_frame.rowconfigure(1, weight=1)
 
         box.bind("<Double-1>", lambda e: on_change_selected_movie(box.curselection()))
+        entry_entry.bind("<Return>", lambda e: entry_button.invoke())
