@@ -1,12 +1,9 @@
 import requests
-from dotenv import load_dotenv
-import os
 from datetime import datetime
 from sqlmodel import Session, select
 from Models.Movie import Movie
+from constants import API_KEY
 
-load_dotenv()
-API_KEY = os.getenv("API_KEY")
 
 
 def get_movie(movie):

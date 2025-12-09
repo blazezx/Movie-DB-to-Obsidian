@@ -1,9 +1,12 @@
 from tkinter import *
 from tkinter import ttk
-import os
 from sqlmodel import SQLModel, create_engine
 from Components.Search import SearchFrame
 from Components.display_movie_details import MovieDetails
+from constants import API_KEY
+
+if API_KEY is None:
+    raise ValueError("API_KEY not found in environment variables.")
 
 
 sqlite_file_name = "database.db"
